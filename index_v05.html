@@ -1,0 +1,60 @@
+<!-- game version_05 Reset Functionality. Game Scores -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tic Tac Toe</title>
+  <script src="js/jquery.js"></script>
+  <script src="js/main.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+
+    <div class="container">
+      <header>
+        <h1 id="gameTitle"> Tic <span id="gameTitle"><h4 id="symbols"> 0 </h4></span> Tac <span id="gameTitle"><h4 id="symbols"> X </h4></span> Toe </h1>
+        <h2 id="gameStatus">Player X ... your turn</h2>
+      </header>
+      <div class="middle">
+
+          <div class="boxLeft" class="middleRowBox">
+            <h4 class="playerX"> Player X </h4>
+            <h4 class="playerX" id="scoreX"> 0 </4>
+          </div>
+
+          <div class="gameBoard" class="middleRowBox">
+            <div class="row1">
+              <button id="button1"text.style="visibility:hidden">.</button>
+              <button id="button2">.</button>
+              <button id="button3">.</button>
+            </div> <!-- end div row1 -->
+            <div class="row2">
+              <button id="button4">.</button>
+              <button id="button5">.</button>
+              <button id="button6">.</button>
+            </div> <!-- end div row2 -->
+            <div class="row3">
+              <button id="button7">.</button>
+              <button id="button8">.</button>
+              <button id="button9">.</button>
+            </div> <!-- end div row3 -->
+          </div> <!-- end div gameBoard -->
+
+          <div class="boxRight" class="middleRowBox">
+            <h4 class="player0"> Player 0 </h4>
+            <h4 class="player0" id="score0"> 0 </4>
+          </div>
+          
+      </div> <!-- end div middle -->
+      <div class="resetButtons">
+          <input id="playAgain" type="button" value="Play again"/>
+          <!-- <button id="playAgain"> Play again </button> -->
+          <!-- <button id="resetGame"> Reset Score </button> -->
+          <input id="resetGame" type="button" value="Reset Score"/>
+      </div>
+    </div> <!-- end div container -->
+</body>
+</html>

@@ -1,4 +1,4 @@
-
+/* game version_03 ... Multi buttton event listener. Reset Function works.. */
 
 header {
   position: relative;
@@ -12,10 +12,6 @@ header {
 }
 #symbols {
   font-size: 15px;
-}
-
-#gameStatus {
-  /* color: rgb(220,220,220); */
 }
 
 body {
