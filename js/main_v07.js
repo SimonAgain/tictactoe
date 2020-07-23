@@ -1,4 +1,4 @@
-/* game version_08.. AI row and column blocking and Random moves working. */
+/* game version_07.. AI row blocking and Random AI working. */
 
 $(document).ready(function() {
 
@@ -379,61 +379,6 @@ console.log(currentPlayer+' !!!!  generating Defensive move  !!!');
       //   de false;
       }; // end if
     }; // end for loop for each row.
-
-    //checking COLUMNS only.. Will try just swapping out c's for r's.
-    for (let c = 0; c < gameBoard.length; c++) {
-      opponentDanger = 0; // resets with each row.
-      // console.log('Entered loop for row '+r);
-      for (let r = 0; r < gameBoard.length; r++) { // check each cell in that row.
-        // console.log('Checking column '+c+' ');
-        // console.log('Danger level is ' + opponentDanger);
-        if ( gameBoard[r][c].indexOf(currentPlayer) >= 0 ) {// if currentPlayer occupies that spot..
-            // console.log('space is occupied by Player'+ currentPlayer+'. Break to the next column');
-            break; // go to the next row.
-
-        } else if ( gameBoard[r][c].indexOf(opponentPlayer) === -1  ) { //if space is not taken, it's a potential move.
-            blockPositionCol = c; // assign the potential column position.
-            blockPositionRow = r; // assigns potential row position.
-            console.log('dangerSpace (empty space) assigned '+ r + c);
-            console.log('dangerLevel is '+opponentDanger);
-            if (opponentDanger === (gameBoard.length - 1)) { // means there is only one space on this row without the opponent's piece. ie. if the opponentDanger is 2, in this game size of 3x3.
-                defensiveBlock = true; // signaling we found the highest priority move.
-                  console.log('The last space in this row is empty and dangerLevel is ' + opponentDanger);
-                    break; // call the urgent move !!!
-            }; // end nested if..
-
-        } else { // if the opponent has a piece there, danger level increases.
-            opponentDanger++;
-            console.log(' opponent piece found.. dangerlevel now '+ opponentDanger + '. On row' + r + ' col' + c);
-            if (opponentDanger === (gameBoard.length - 1)) { // means there is only one space without the opponent's piece. In this game size, if the matchCounter is 2. Only enters here when the danger level is reached. Need to check if that last position is occupied.
-                if ( r === gameBoard.length - 2 ) { // if we are currently looping in the second last position.
-                    console.log(' in the middle position');
-                  if ( gameBoard[r+1][c].indexOf(currentPlayer) >= 0 ) {// currentPlayer is there.
-                    console.log('last space is occupied by computer..');
-                    opponentDanger = 0; // reset the dangerLevel and breaks for the next row.
-                    break;
-                  } else { // if the space is blank
-                    console.log('last space is not occupied by computer');
-                    blockPositionCol = c;
-                    blockPositionRow = gameBoard.length - 1;
-                  }; // end if.
-                };
-                defensiveBlock = true; // signaling we found the highest priority move.
-                  // console.log('opponent danger before break' + opponentDanger);
-                break; // call the urgent move !!!
-            }; // end nested if..
-        };// end if
-      }; // end for loop; for each column...
-      if (defensiveBlock) { // if defensive move is found
-        const pos = [blockPositionRow,blockPositionCol];
-        console.log('Defensive Move Established.. returning these positions '+ pos);
-        return pos;
-      // } else {
-      //   de false;
-      }; // end if
-    }; // end for loop for each row.
-
-
     //
     //   // check column for winning scenario
     //   for (let c = 0; c < gameBoard.length; c++) {

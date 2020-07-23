@@ -10,7 +10,7 @@ A “Play Again” and a “Reset Score” button allows for further game contro
 
 The game score and when playing consecutive games, the looser of the previous game will take the first move of the next game.
 
-In Version 7, the AI player upgraded. Places random moves unless a row needs to be blocked. ie. Ie the opponent has all the other spaces in that row and you need to take the last space to block them.
+In Version 8, the AI player is upgraded. Row and column blocking implemented. If the blocking isn't needed, the AI will place a random move.
 
 The project has been a great learning experience and I look forward to further education in the field. A takeaway from this project is to plan the project before coding. I took the attitude of delivering a minimal viable product with the intention of improving my code and design at a later state. Although providing a minimal viable product is sound, I look it too far in this instance. Once too far down the path, there wasn’t the time to remodel the project. A more thought out design could have allowed for expansion and versatile extras. Still a great learning experience..
 
