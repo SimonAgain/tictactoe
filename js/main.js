@@ -170,8 +170,7 @@ const thereIsAWinner = function() { // returns true or false accordingly
     };
 }; // end thereIsAWinner
 
-// validMove places the move on the gameBoard array and returns true,
-// else returns false if that position has already been taken.
+// places the move on the gameBoard array and returns true, else returns false if that position has already been taken.
 const validMove = function( button ) {
     if ( gameOver ) { // if game is over do nothing.
         return false;
@@ -259,159 +258,19 @@ const resetGameBoard = function() {
 }
 
 const playComputerMove = function() {
+    //attempts a valid validMove
+    // if the move is valid then updated the GUI by placing a zero on the chosen spot.
+    let selectedPosition = 'button' + generateMove();
 
-  // generate a priority defensive move
-
-    const defensiveMove = generateDefensiveMove(); // get the defensive move if determined.
-                                                  // defensiveMove will be an array.
-    let buttonName = 'nothingYet'; // to be assigned in the if where it's needed.
-
-    if ( defensiveMove ) {
-        buttonName = convertToButtonName(defensiveMove);
-        validMove(buttonName);
-    } else { // if not a defensive move then do a random move.
-        buttonName = 'button' + generateRandomMove();
-
-        while ( !validMove(buttonName) ) { //if spot is taken, then generate another random move.
-          buttonName = 'button' + generateRandomMove();
-        };// end while loop
-    };// end if.
-      // update GUI by placing piece on chosen spot.
-    $('#' + buttonName).text(currentPlayer);
-    $('#' + buttonName).css('color', 'black');
+    while ( !validMove(selectedPosition) ) {
+      selectedPosition = 'button' + generateMove();
+    };// end while loop
+    $('#' + selectedPosition).text(currentPlayer);
+    $('#' + selectedPosition).css('color', 'black');
 
 }; // end playComputerMove
 
-const generateRandomMove = function() { // return a number representing button on the board.
+const generateMove = function() { // return a number representing button on the board.
     // try generate random number
     return Math.floor(Math.random() * 10);
 };// end generateMove
-
-////////////////////////////// AI player logic ///////////////////////////
-
-const convertToButtonName = function(coordinates) { //use the board array coordinates to make a button name.
-    const rowPos = coordinates[0];
-    const colPos = coordinates[1];
-    let buttonNumber = 0;
-    if ( rowPos === 0 ) {
-      buttonNumber = rowPos + colPos + 1;
-    } else if ( rowPos === 1) {
-      buttonNumber = rowPos + colPos + 3;
-    } else {
-      buttonNumber = rowPos + colPos + 5;
-    }; // end if.
-    console.log('the converted Button name is .... button'+buttonNumber);
-    return 'button'+buttonNumber;
-}; // end generateButtonName
-
-//////////////////check for defensive move/////////////
-
-const generateDefensiveMove = function() { // this function only needs to determine the first instance to block.
-
-    let opponentPlayer = playerX; // Doesn't matter, it will be assigned next.
-
-    if (currentPlayer === playerX) { // places the opponent in a local variable.
-      opponentPlayer = player0;
-    } else {
-      opponentPlayer = playerX;
-    }; // end if
-
-    let blockPositionRow = 0; // the determined position.
-    let blockPositionCol = 0;
-
-    let defensiveBlock = false; // if the move has been found.
-
-    let opponentDanger = 0; // tracks the instances of opponent's pieces for each check.
-
-console.log(currentPlayer+'should be the computer player');
-
-    //checking ROWs only.. Will check others later.
-    for (let r = 0; r < gameBoard.length; r++) {
-      opponentDanger = 0; // resets with each row.
-      console.log('entering row '+r);
-      for (let c = 0; c < gameBoard[r].length; c++) { // check each cell in that row.
-        console.log('in loop row '+r+' column '+c);
-        if ( gameBoard[r][c].indexOf(currentPlayer) >= 0 ) {// if currentPlayer occupies that spot..
-            console.log('space is occupied by '+ opponentPlayer+'. Break to the next column');
-            break; // go to the next row.
-
-        } else if ( gameBoard[r][c].indexOf(opponentPlayer) === -1  ) { //if space is not taken, it's a potential move.
-            blockPositionCol = c; // assign the potential column position.
-            blockPositionRow = r; // assigns potential row position.
-            console.log('dangerSpace'+ r + c);
-            console.log('opponent danger is '+opponentDanger);
-            if (opponentDanger === (gameBoard.length - 1)) { // means there is only one space on this row without the opponent's piece. ie. if the opponentDanger is 2, in this game size of 3x3.
-                defensiveBlock = true; // signaling we found the highest priority move.
-                  console.log('opponent danger before break' + opponentDanger);
-                    break; // call the urgent move !!!
-            }; // end nested if..
-
-        } else { // if the opponent has a piece there, danger level increases.
-            opponentDanger++;
-            console.log(' opponent danger added.. dangerNumber '+ opponentDanger + 'on row' + r + ' col' + c);
-            if (opponentDanger === (gameBoard.length - 1)) { // means there is only one space without the opponent's piece. In this game size, if the matchCounter is 2. Only enters here when the danger level is reached. In the event there is a space in the last postion in the row, need to check that.
-                if ( c === gameBoard.length - 2 ) { // if we are currently looping in the second last position.
-                  if ( gameBoard[r][c].indexOf(currentPlayer) >= 0 ) {// currentPlayer is there.
-                    opponentDanger = 0; // reset the dangerLevel and breaks for the next row.
-                    break;
-                  } else { // if the space is blank
-                    blockPositionCol = gameBoard.length - 1;
-                    blockPositionRow = r;
-                  }; // end if.
-                };
-                defensiveBlock = true; // signaling we found the highest priority move.
-                  // console.log('opponent danger before break' + opponentDanger);
-                break; // call the urgent move !!!
-            }; // end nested if..
-        };// end if
-      }; // end for loop; for each row..
-      if (defensiveBlock) { // if defensive move is found
-        const pos = [blockPositionRow,blockPositionCol];
-        console.log('returning these positions '+ pos);
-        return pos;
-      } else {
-        return false;
-      }; // end if
-    }; // end for loop for each row.
-    //
-    //   // check column for winning scenario
-    //   for (let c = 0; c < gameBoard.length; c++) {
-    //     let colWinner = true;
-    //     for (let r = 0; r < gameBoard.length; r++) {
-    //       if ( gameBoard[r][c].indexOf(currentPlayer) === -1 ) { //if no match. Using the idea that you only need to disprove the match once for no winner.
-    //         colWinner = false;
-    //         break; // as soon as no match, break
-    //       }; // and if.
-    //     }; // end for loop for each cell
-    //     if (colWinner) { // if the colWinner is true then match change the gameWinner to true;
-    //       gameOver = true;
-    //       return true;
-    //     };
-    //   }; // end for loop for each row.
-    //
-    // // Check for diagonal winning scenario
-    // let diagonalWinner1 = true; // again only need to disprove it once.
-    // for (let r = 0, c = 0; r < gameBoard.length; r++, c++) {
-    //   if ( gameBoard[r][c].indexOf(currentPlayer) === -1) {
-    //     diagonalWinner1 = false;
-    //     break;
-    //   }; // end if
-    // }; // end for
-    // if ( diagonalWinner1 === true ){
-    //   gameOver = true;
-    //   return true;
-    // };
-    //
-    // // check other diagonal.
-    // let diagonalWinner2 = true;
-    // for ( let r = 0, c = (gameBoard.length -1); r < gameBoard.length; r++, c--) {
-    //   if ( gameBoard[r][c].indexOf(currentPlayer) === -1) {
-    //     diagonalWinner2 = false;
-    //     break;
-    //   }; // end if
-    // }; // end for
-    // if ( diagonalWinner2 === true ){
-    //   gameOver = true;
-    //   return true;
- };
- // end thereIsAWinner
