@@ -1,10 +1,10 @@
-/* game version_10 .. AI last space saving moves otherwise random moves. Working on game play option buttons.*/
+/* game version_09.. AI blocking last space saving moves otherwise generates random moves. working.*/
 
 $(document).ready(function() {
 
   $('button').on(`click`, function() {
     const buttonPressed = this.id; // get the ID of the button.
-    if ( validMove(buttonPressed) ) {
+    if ( validMove(buttonPressed/*, currentPlayer*/) ) {
       $('#' + buttonPressed).text(currentPlayer);
       $('#' + buttonPressed).css('color', 'black');
       $('#' + buttonPressed).css('font-size', '50px');
@@ -17,43 +17,28 @@ $(document).ready(function() {
   }); // end position placement click
 
   $('#resetGame').on('click', function() {
-    onePlayerMode = false;
+    console.log('Reset Game');
     resetScore();
     playAgain();
-    $('#startChallenge').attr('type','button');
-    $('#challengeAI').attr('type','button');
-    $('#playAgain').attr('type','hidden');
-    $('#resetGame').attr('type','hidden');
-    $('#gameStatus').text(` Choose an option `);
-    gameOver = true;
   });
 
   $('#playAgain').on('click', function() {
+    console.log('Play Again');
     playAgain();
   });
 
-  $('#startChallenge').on('click', function() {
-      gameOver = false;
-      $('#startChallenge').attr('type','hidden');
-      $('#challengeAI').attr('type','hidden');
-      $('#playAgain').attr('type','button');
-      $('#resetGame').attr('type','button');
-      $('#gameStatus').text(`Player ${currentPlayer}... your turn`);
-  });
-
-  $('#challengeAI').on('click', function() {
-      gameOver = false;
-      $('#startChallenge').attr('type','hidden');
-      $('#challengeAI').attr('type','hidden');
-      $('#playAgain').attr('type','button');
-      $('#resetGame').attr('type','button');
-
+  $('#onePlayerMode').on('click', function() {
+    console.log('One Player Mode pressed');
+    if ( onePlayerMode ) { // if already in onePlayerMode
+      onePlayerMode = false; // change it to twoPlayerMode
+      $(this).css('color','black');
+      $(this)[0].value='Activate One Player Mode';
+    } else { // if not already in onePlayerMode
       onePlayerMode = true; // change to onePlayerMode
-      currentPlayer = playerX; // always asign the human to playerX
-
-      $('#gameStatus').text(`Player ${currentPlayer}... your turn`);
+      $(this).css('color','red');
+      $(this)[0].value='One Player Mode Active';
+    };//end if
   });
-
 });// end document ready
 
 // the game board. An array of 3 arrays. Rows and columns.
@@ -64,12 +49,12 @@ const playerX = "X";
 const player0 = "0";
 
 const playerComputer = "0";
-let onePlayerMode = false; // used to keep the computer on player0
+let onePlayerMode = false;
 
 // Keeps track of who's turn it is.
 let currentPlayer = playerX;
 
-let gameOver = true;
+let gameOver = false;
 
 let winsX = 0;
 let wins0 = 0;
@@ -259,18 +244,10 @@ const resetScore = function() { //resets the gameScore
 }; // end resetScore
 
 const playAgain = function() {
-  gameOver=false;
   resetGameBoard();
   changeTurn();
-  if (onePlayerMode && (currentPlayer === player0)) { // if it's on AI player and it's the AI's turn.
-    playComputerMove();
-    changeTurn();
-    //might need to update status on who's play it is next
-    // $('#gameStatus').text(`Player ${currentPlayer}... your turn`);
-  };
-    $('#gameStatus').text(`Player ${currentPlayer}... your turn`);
-
-}; // end play again.
+  $('#gameStatus').text(`Player ${currentPlayer}... your turn`);
+};
 
 const resetGameBoard = function() {
   gameBoard = [ ["", "", "",], [ "", "", "",], [ "", "", "",] ];
@@ -278,7 +255,7 @@ const resetGameBoard = function() {
   $('button').css('color', 'rgb(240,240,240');
   $('button:hover').css('color', 'rgb(229,229,229)');
   turnsRemaining = 9; // 9 because changeTurn() is called next, reducing by 1.
-  //gameOver = true;
+  gameOver = false;
 }
 
 //////////////////////////////    AI player      ///////////////////////////
@@ -293,10 +270,13 @@ const playComputerMove = function() {
 
     if ( defensiveMove ) {
         buttonName = convertToButtonName(defensiveMove);
+        console.log(`AI placing defensive move at `+buttonName);
         validMove(buttonName);
     } else { // if not a defensive move then do a random move.
         buttonName = 'button' + generateRandomMove();
+        console.log('No Defensive move... AI will attempt to move to '+ buttonName);
         while ( !validMove(buttonName) ) { //if spot is taken, then generate another random move.
+                  console.log('Still attempting AI move'+ buttonName);
           buttonName = 'button' + generateRandomMove();
         };// end while loop
     };// end if.
@@ -322,6 +302,7 @@ const convertToButtonName = function(coordinates) { //use the board array coordi
   } else {
     buttonNumber = rowPos + colPos + 5;
   }; // end if.
+  console.log('the converted Button name is .... button'+buttonNumber);
   return 'button'+buttonNumber;
 }; // end generateButtonName
 
@@ -342,6 +323,7 @@ const generateDefensiveMove = function() { // this function only needs to determ
 
     let opponentDanger = 0; // the danger level. Higher the more occurances of the opponent's player.
 
+console.log(currentPlayer+' !!!!  generating Defensive move  !!!');
 
     //checking ROWs only.. Will check columns later.
     for (let r = 0; r < gameBoard.length; r++) {
@@ -420,7 +402,7 @@ const generateDefensiveMove = function() { // this function only needs to determ
     }; // end for loop for each row.
 
 
-    // // Check for diagonal danger.
+    // // Check for diagonal danger. Simple version first as have run out of time.
 
     let spaceFound = false;
     opponentDanger = 0; // resetting the dangerLevel meter.
@@ -438,6 +420,7 @@ const generateDefensiveMove = function() { // this function only needs to determ
 
               } else { // but if no potential move was found.
                 if ( r === gameBoard.length - 2 ){ // if we are on the second last space, need to check if last space if free.
+                  console.log('we are in the second last position. Checking last position.');
                   if ( gameBoard[r+1][c+1].indexOf(currentPlayer) === -1 ) { // if last space is free, claim it. Otherwise it's ocupied by the AI (currentPlayer).
                     blockPositionCol = c+1; // assign the potential column position.
                     blockPositionRow = r+1; // assigns potential row position.
@@ -476,6 +459,7 @@ const generateDefensiveMove = function() { // this function only needs to determ
 
               } else { // but if no potential move was found.
                 if ( r === gameBoard.length - 2 ){ // if we are on the second last space, need to check if last space if free.
+                  console.log('we are in the second last position. Checking last position.');
                   if ( gameBoard[r+1][c-1].indexOf(currentPlayer) === -1 ) { // if last space is free, claim it. Otherwise it's ocupied by the AI (currentPlayer).
                     blockPositionCol = c-1; // assign the potential column position.
                     blockPositionRow = r+1; // assigns potential row position.
@@ -498,4 +482,39 @@ const generateDefensiveMove = function() { // this function only needs to determ
       return pos;
     };
 
- };// end generateDefensiveMove
+    // // // Check for diagonal danger. Simple version first as have run out of time.
+    // console.log('!!!!  diagonal checker  !!!!');
+    // opponentDanger = 0;
+    // let diagonalSafe = false;
+    // for (let r = 0, c = 0; r < gameBoard.length; r++, c++) {
+    //   if ( gameBoard[r][c].indexOf(currentPlayer) === -1) { // if AI has a piece there.
+    //     diagonalSafe = true;
+    //     break; // the diagonal is safe as the AI has a piece there.
+    //   } else { // it's a potential move
+    //       if ( opponent has a piece there. ) { // if the opponent has a piece there.
+    //         opponentDanger++; //dangerLevel increases
+    //         if ( the dangerlevel is the size of the array -1 ) {// there is potentially only one saving move.
+    //         }; // end if
+    //       } else { // the space is blank.
+    //
+    //       };// end if
+    //   }; // end if
+    // }; // end for
+    // if ( diagonalWinner1 === true ){
+    //   gameOver = true;
+    //   return true;
+    // };
+    // //
+    // // check other diagonal.
+    // let diagonalWinner2 = true;
+    // for ( let r = 0, c = (gameBoard.length -1); r < gameBoard.length; r++, c--) {
+    //   if ( gameBoard[r][c].indexOf(currentPlayer) === -1) {
+    //     diagonalWinner2 = false;
+    //     break;
+    //   }; // end if
+    // }; // end for
+    // if ( diagonalWinner2 === true ){
+    //   gameOver = true;
+    //   return true;
+ };
+ // end generateDefensiveMove

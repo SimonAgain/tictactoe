@@ -1,4 +1,4 @@
-/* game version_10 .. AI last space saving moves otherwise random moves. Working on game play option buttons. */
+/* game version_9.1 code tidy from version 1.. AI last space saving moves otherwise random moves. Working on game play option buttons. */
 
 body {
   background-color: rgb(220,220,220);
@@ -81,14 +81,17 @@ button:hover {
 
 .gameOptions input {
   display: inline-block;
-  font-size: 17px;
+  font-size: 16px;
   margin: 0px 0px 5px 5px;
   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-  width: 200px;
 }
 
 .gameOptions {
   position: relative;
   margin: 25px auto;
   left: 25%;
+}
+
+#onePlayerMode {
+   width: 205px; /*so box stays same between toggling*/
 }

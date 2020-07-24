@@ -1,4 +1,4 @@
-<!-- game version_10 .. AI last space saving moves otherwise random moves. Working on game play option buttons.-->
+<!-- game version_09.. AI blocking last space saving moves otherwise generates random moves. working.-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +18,7 @@
         <h1 id="gameTitle"> Tic <span id="gameTitle"><h4 id="symbols"> 0 </h4></span> Tac <span id="gameTitle"><h4 id="symbols"> X </h4></span> Toe </h1>
       </header>
       <div class="gameStatus">
-        <h2 id="gameStatus"> Choose an option </h2>
+        <h2 id="gameStatus">Player X ... your turn</h2>
       </div>
       <div class="middle">
 
@@ -30,7 +30,7 @@
           <div class="boxMiddle middleRowBox">
             <div class="gameBoard">
               <div class="row1">
-                <button id="button1">.</button>
+                <button id="button1"text.style="visibility:hidden">.</button>
                 <button id="button2">.</button>
                 <button id="button3">.</button>
               </div> <!-- end div row1 -->
@@ -54,11 +54,9 @@
 
       </div> <!-- end div middle -->
       <div class="gameOptions">
-          <input id="startChallenge" type="button" value="Start Challenge"/>
-          <input id="challengeAI" type="button" value="Challenge AI"/>
-          <input id="playAgain" type="hidden" value="Play again"/>
-          <input id="resetGame" type="hidden" value="Reset Game"/>
-          <!--<input id="onePlayerMode" type="button" value="Activate One Player Mode"/> -->
+          <input id="playAgain" type="button" value="Play again"/>
+          <input id="resetGame" type="button" value="Reset Score"/>
+          <input id="onePlayerMode" type="button" value="Activate One Player Mode"/>
       </div>
     </div> <!-- end div container -->
 </body>

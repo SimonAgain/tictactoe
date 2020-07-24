@@ -1,4 +1,4 @@
-/* game version_10 .. AI last space saving moves otherwise random moves. Working on game play option buttons.*/
+/* game version_9.1 code tidy from version 1.. AI last space saving moves otherwise random moves. Working on game play option buttons.*/
 
 $(document).ready(function() {
 
@@ -17,43 +17,26 @@ $(document).ready(function() {
   }); // end position placement click
 
   $('#resetGame').on('click', function() {
-    onePlayerMode = false;
     resetScore();
     playAgain();
-    $('#startChallenge').attr('type','button');
-    $('#challengeAI').attr('type','button');
-    $('#playAgain').attr('type','hidden');
-    $('#resetGame').attr('type','hidden');
-    $('#gameStatus').text(` Choose an option `);
-    gameOver = true;
   });
 
   $('#playAgain').on('click', function() {
     playAgain();
   });
 
-  $('#startChallenge').on('click', function() {
-      gameOver = false;
-      $('#startChallenge').attr('type','hidden');
-      $('#challengeAI').attr('type','hidden');
-      $('#playAgain').attr('type','button');
-      $('#resetGame').attr('type','button');
-      $('#gameStatus').text(`Player ${currentPlayer}... your turn`);
-  });
-
-  $('#challengeAI').on('click', function() {
-      gameOver = false;
-      $('#startChallenge').attr('type','hidden');
-      $('#challengeAI').attr('type','hidden');
-      $('#playAgain').attr('type','button');
-      $('#resetGame').attr('type','button');
-
+  $('#onePlayerMode').on('click', function() {
+    if ( onePlayerMode ) { // if already in onePlayerMode
+      onePlayerMode = false; // change it to twoPlayerMode
+      $(this).css('color','black');
+      $(this)[0].value='Activate One Player Mode';
+    } else { // if not already in onePlayerMode
       onePlayerMode = true; // change to onePlayerMode
       currentPlayer = playerX; // always asign the human to playerX
-
-      $('#gameStatus').text(`Player ${currentPlayer}... your turn`);
+      $(this).css('color','red');
+      $(this)[0].value='One Player Mode Active';
+    };//end if
   });
-
 });// end document ready
 
 // the game board. An array of 3 arrays. Rows and columns.
@@ -64,12 +47,12 @@ const playerX = "X";
 const player0 = "0";
 
 const playerComputer = "0";
-let onePlayerMode = false; // used to keep the computer on player0
+let onePlayerMode = false;
 
 // Keeps track of who's turn it is.
 let currentPlayer = playerX;
 
-let gameOver = true;
+let gameOver = false;
 
 let winsX = 0;
 let wins0 = 0;
@@ -259,18 +242,10 @@ const resetScore = function() { //resets the gameScore
 }; // end resetScore
 
 const playAgain = function() {
-  gameOver=false;
   resetGameBoard();
   changeTurn();
-  if (onePlayerMode && (currentPlayer === player0)) { // if it's on AI player and it's the AI's turn.
-    playComputerMove();
-    changeTurn();
-    //might need to update status on who's play it is next
-    // $('#gameStatus').text(`Player ${currentPlayer}... your turn`);
-  };
-    $('#gameStatus').text(`Player ${currentPlayer}... your turn`);
-
-}; // end play again.
+  $('#gameStatus').text(`Player ${currentPlayer}... your turn`);
+};
 
 const resetGameBoard = function() {
   gameBoard = [ ["", "", "",], [ "", "", "",], [ "", "", "",] ];
@@ -278,7 +253,7 @@ const resetGameBoard = function() {
   $('button').css('color', 'rgb(240,240,240');
   $('button:hover').css('color', 'rgb(229,229,229)');
   turnsRemaining = 9; // 9 because changeTurn() is called next, reducing by 1.
-  //gameOver = true;
+  gameOver = false;
 }
 
 //////////////////////////////    AI player      ///////////////////////////
