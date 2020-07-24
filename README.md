@@ -10,7 +10,7 @@ A “Play Again” and a “Reset Score” button allows for further game contro
 
 The game score and when playing consecutive games, the looser of the previous game will take the first move of the next game.
 
-In Version 8, the AI player is upgraded. Row and column blocking implemented. If the blocking isn't needed, the AI will place a random move.
+In Version 9, the AI player blocks last move saves otherwise generates random moves.
 
 The project has been a great learning experience and I look forward to further education in the field. A takeaway from this project is to plan the project before coding. I took the attitude of delivering a minimal viable product with the intention of improving my code and design at a later state. Although providing a minimal viable product is sound, I look it too far in this instance. Once too far down the path, there wasn’t the time to remodel the project. A more thought out design could have allowed for expansion and versatile extras. Still a great learning experience..
 
@@ -18,7 +18,8 @@ Knows bugs/annoyances:
 * Game board buttons show a dot once “Play Again” or “Reset Score” has been pressed.
     * This is caused but needing a hidden character in place in order to place the “X” or “0”. Without a character  already in place, the boxes of the game board would pop out of position when placing the player’s symbol..
 	  * The use of “button” to make up the game board and the way in which wrote an X or 0 to that button, could be the cause. I would like to try using another method to add boxes to the game board as well as overlaying an image to the location as the symbol rather than “writing” character to that location.
-* At version 6, if using the AI player for consecutive games, the player would change sides between games. Meaning the score counter is useless as the human player is forced to change symbol between games.
+* At version 9, if using the AI player for consecutive games, the player would change sides between games. Meaning the score counter is useless as the human player is forced to change symbol between games.
+    * To overcome this, press the "Play Again" button to switch players.
 	  * Future version would assign the AI player to a set symbol.
 
 A working version of the project can be found here. [link to game](http://SimonAgain.github.io/tictactoe
