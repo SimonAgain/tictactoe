@@ -1,4 +1,4 @@
-<!--   game version_12 .. AI offence and defence.  -->
+<!--  game version_10 .. Submitted versioin. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,14 +18,13 @@
         <h1 id="gameTitle"> Tic <span id="gameTitle"><h4 id="symbols"> 0 </h4></span> Tac <span id="gameTitle"><h4 id="symbols"> X </h4></span> Toe </h1>
       </header>
       <div class="gameStatus">
-        <h2 id="gameStatus"> Choose a challenge </h2>
+        <h2 id="gameStatus"> Choose an option </h2>
       </div>
       <div class="middle">
 
           <div class="boxLeft middleRowBox">
-            <img src="images/playerX.gif" id="imageX" height="150px">
             <h4 class="playerX"> Player X </h4>
-            <h4 class="playerX" id="scoreX"> 0 </h4>
+            <h4 class="playerX" id="scoreX"> 0 </4>
           </div>
 
           <div class="boxMiddle middleRowBox">
@@ -49,16 +48,15 @@
           </div><!-- end div boxMiddle -->
 
           <div class="boxRight middleRowBox">
-            <img src="images/tGR.gif" id="image0" height="150px">
             <h4 class="player0"> Player 0 </h4>
-            <h4 class="player0" id="score0"> 0 </h4>
+            <h4 class="player0" id="score0"> 0 </4>
           </div>
 
       </div> <!-- end div middle -->
       <div class="gameOptions">
-          <input id="challengeHuman" type="button" value="Challenge Human"/>
+          <input id="startChallenge" type="button" value="Start Challenge"/>
           <input id="challengeAI" type="button" value="Challenge AI"/>
-          <input id="continueChallenge" type="hidden" value="Continue Challenge"/>
+          <input id="playAgain" type="hidden" value="Play again"/>
           <input id="resetGame" type="hidden" value="Reset Game"/>
           <!--<input id="onePlayerMode" type="button" value="Activate One Player Mode"/> -->
       </div>

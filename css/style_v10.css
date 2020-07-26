@@ -1,4 +1,4 @@
-/*  game version_12 .. AI offence and defence.  */
+/* game version_10 .. Submitted versioin. */
 
 body {
   background-color: rgb(220,220,220);
@@ -28,6 +28,7 @@ header {
 .gameStatus {
   text-align: center;
   font-size: 20px;
+
 }
 
 div.middle {
@@ -35,79 +36,29 @@ div.middle {
   min-height: 314px;
 }
 
-.middleRowBox {
-  display: inline-block;
-  /* border: 5px solid red; */
-}
-
 .boxLeft, .boxRight {
   width: 30%;
   vertical-align: top;
   height: 100%;
-
 }
 
 .boxLeft, .boxRight {
   text-align: center;
   font-size: 22px;
-  /* border: 3px solid red; */
 }
 
-/* .imageX{
+.middleRowBox {
+  display: inline-block;
+  /* border: 5px solid red; */
+}
+
+div.gameBoard {
   position: relative;
-  top: -100px;
-  /* top: -30px; */
-  /* background-color: black; */
-
-
-.imageX {
-  shadow: 10px black;
-  /* position: inherit;
-  top: 360px;
-  left: 220px; */
-  /* margin: 80px auto; */
-  /* top: -30px; */
-  /* background-color: black; */
+  max-width: 314px;
+  margin: 5px auto;
+  background-color: black;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
-/* .playerX {
-  position: absolute;
-  margin: -10px 0px 0px 86px;
-} */
-
-.playerX {
-  /* position: inherit;
-  top: 20px;
-  background-color: black; */
-  /* background-position: */
-  /* top: 360px;
-  left: 220px; */
-}
-  /* #scoreX {
-  position: inherit; */
-  /* top: 380px;
-  left: 840px; */
-  /* top: 20px; */
-  /* margin: 20px 0px 0px 0px; */
-
-
-/* .player0 {
-  position: absolute;
-  top: 360px;
-  left: 840px;
-}
-
-#score0 {
-   position: inherit;
- } */
-
- div.gameBoard {
-   position: relative;
-   max-width: 314px;
-   margin: 5px auto;
-   background-color: grey;
-   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
- }
-
 
 .row1 button, .row2 button, .row3 button {
   display: inline-block;

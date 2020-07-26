@@ -1,4 +1,4 @@
-/* game version_12 .. AI offence and defence. */
+/* game version_11 .. Street Fighter characters added. */
 
 $(document).ready(function() {
 
@@ -22,13 +22,13 @@ $(document).ready(function() {
     playAgain();
     $('#challengeHuman').attr('type','button');
     $('#challengeAI').attr('type','button');
-    $('#continueChallenge').attr('type','hidden');
+    $('#playAgain').attr('type','hidden');
     $('#resetGame').attr('type','hidden');
     $('#gameStatus').text(` Choose a challenge `);
     gameOver = true;
   });
 
-  $('#continueChallenge').on('click', function() {
+  $('#playAgain').on('click', function() {
     playAgain();
   });
 
@@ -36,7 +36,7 @@ $(document).ready(function() {
       gameOver = false;
       $('#challengeHuman').attr('type','hidden');
       $('#challengeAI').attr('type','hidden');
-      $('#continueChallenge').attr('type','button');
+      $('#playAgain').attr('type','button');
       $('#resetGame').attr('type','button');
       $('#gameStatus').text(`Player ${currentPlayer}... your turn`);
   });
@@ -45,7 +45,7 @@ $(document).ready(function() {
       gameOver = false;
       $('#challengeHuman').attr('type','hidden');
       $('#challengeAI').attr('type','hidden');
-      $('#continueChallenge').attr('type','button');
+      $('#playAgain').attr('type','button');
       $('#resetGame').attr('type','button');
 
       onePlayerMode = true; // change to onePlayerMode
@@ -298,18 +298,13 @@ const resetGameBoard = function() {
 
 const playComputerMove = function() {
 
-    const timeDelay=timeDelayComputerMove(); // to try and make it feel more human
+  // generate a priority defensive move
 
     const defensiveMove = generateDefensiveMove(); // get the defensive move if determined.
                                                   // defensiveMove will be an array.
-    const offensiveMove = generateOffensiveMove(); // generate a last space to win move.
-
     let buttonName = 'nothingYet'; // to be assigned in the if where it's needed.
 
-    if ( offensiveMove ) { // check for offensive move.
-        buttonName = convertToButtonName(offensiveMove);
-        validMove(buttonName);
-    } else if ( defensiveMove ) { // if no offensive move, check for defensive move
+    if ( defensiveMove ) {
         buttonName = convertToButtonName(defensiveMove);
         validMove(buttonName);
     } else { // if not a defensive move then do a random move.
@@ -323,15 +318,6 @@ const playComputerMove = function() {
     $('#' + buttonName).css('color', 'black');
 
 }; // end playComputerMove
-
-const timeDelayComputerMove = function() {
-    let delayTime = 0;
-    for (var i = 0; i < (Math.floor(Math.random() * 10000000) + 10000000); i++) {
-      // time delay for computer move.
-      delayTime++;
-    };
-    return delayTime;
-}; // end timeDelayComputerMove
 
 const generateRandomMove = function() { // return a number representing button on the board.
     // try generate random number
@@ -444,7 +430,7 @@ const generateDefensiveMove = function() { // this function only needs to determ
         const pos = [blockPositionRow,blockPositionCol];
         return pos;
       }; // end if
-    }; // end for loop for each row. End column check
+    }; // end for loop for each row.
 
 
     // // Check for diagonal danger.
@@ -526,177 +512,3 @@ const generateDefensiveMove = function() { // this function only needs to determ
     };
 
  };// end generateDefensiveMove
-
-const generateOffensiveMove = function() { // this will generate an offensive move is there's a one move to win scenario.
-
-  let opponentPlayer = playerX; // Doesn't matter, it will be assigned next.
-
-  if (currentPlayer === playerX) { // places the opponent in a local variable.
-      opponentPlayer = player0;
-  }; // end if
-
-  let blockPositionRow = 0; // the determined position of a potential move
-  let blockPositionCol = 0;
-
-  let offensiveGo = false; // if the move has been found.
-
-  let winLevel = 0; // if the win threshold is met, then the move is executed.
-
-
-  //checking ROWs only.. Will check columns later.
-  for (let r = 0; r < gameBoard.length; r++) {
-    winLevel = 0; // resets for each row as we're checking rows now.
-    for (let c = 0; c < gameBoard[r].length; c++) { // check each cell in that row.
-      if ( gameBoard[r][c].indexOf(opponentPlayer) >= 0 ) {// if opponentPlayer occupies that spot..
-          break; // go to the next row because you can't win on that row.
-
-      } else if ( gameBoard[r][c].indexOf(currentPlayer) === -1  ) { //if space is not taken, it's a potential move.
-          blockPositionCol = c; // assign the potential column position.
-          blockPositionRow = r; // assigns potential row position.
-          if (winLevel === (gameBoard.length - 1)) { // we are on the last space on this row and it's empty the the winLevel threshold is met.
-              offensiveGo = true; // signaling we found the highest priority move.
-              break; // call the urgent move !!!
-          }; // end nested if..
-
-      } else { // if the currentPlayer has a piece there, winLevel increases.
-          winLevel++;
-          if (winLevel === (gameBoard.length - 1)) { // because we just added to opponentDanger we could be on the second last space. Only enters here when the winLevel threshold is reached. Need to check if that last position is occupied.
-              if ( c === gameBoard.length - 2 ) { // if we are currently looping in the second last position.
-                  if ( gameBoard[r][c+1].indexOf(opponentPlayer) >= 0 ) {// the opponent occupies the last space.
-                      opponentDanger = 0; // reset the winLevel and breaks for the next row.
-                      break;              // as this row can't be won.
-                  } else { // if the space is blank, must take it.
-                      blockPositionCol = gameBoard.length - 1;
-                      blockPositionRow = r;
-                    }; // end if.
-              }; // end if
-              offensiveGo = true; // signaling we found the highest priority move.
-              break; // call the urgent move !!!
-          }; // end nested if..
-      };// end if
-    }; // end for loop; for each column...
-    if (offensiveGo) { // if defensive move is found
-        const pos = [blockPositionRow,blockPositionCol];
-        return pos;
-    }; // end if
-  }; // end for loop for each row.
-
-  //checking COLUMNS  Look at comments for rows if needed.
-  for (let c = 0; c < gameBoard.length; c++) {
-    winLevel = 0; // resets with each column.
-    for (let r = 0; r < gameBoard.length; r++) { // check each cell in that column.
-      if ( gameBoard[r][c].indexOf(opponentPlayer) >= 0 ) {// if opponentPlayer occupies that spot..
-          break;
-
-      } else if ( gameBoard[r][c].indexOf(currentPlayer) === -1  ) { //if space is not taken, it's a potential move.
-          blockPositionCol = c; // assign the potential column position.
-          blockPositionRow = r; // assigns potential row position.
-          if (winLevel === (gameBoard.length - 1)) { // means there is only one space on this column without the currentPlayer's piece. ie. if the winLevel is 2, in this game size of 3x3.
-              offensiveGo = true; // signaling we found the highest priority move.
-                  break; // call the urgent move !!!
-          }; // end nested if..
-
-      } else { // if the opponent has a piece there, danger level increases.
-          winLevel++;
-          if (winLevel === (gameBoard.length - 1)) { // means there is only one space without the AI piece. Only enters here when winLevel threhold is reached. Need to check if that last position is occupied.
-              if ( r === gameBoard.length - 2 ) { // if we are currently looping in the second last position.
-                if ( gameBoard[r+1][c].indexOf(opponentPlayer) >= 0 ) {// opponentPlayer is there.
-                  opponentDanger = 0; // reset the winLevel and breaks for the next column.
-                  break;
-                } else { // if the space is blank
-                  blockPositionCol = c;
-                  blockPositionRow = gameBoard.length - 1;
-                }; // end if.
-              };
-              offensiveGo = true; // signaling we found the highest priority move.
-              break; // call the urgent move !!!
-          }; // end nested if..
-      };// end if
-    }; // end for loop; for each column...
-    if (offensiveGo) { // if defensive move is found
-      const pos = [blockPositionRow,blockPositionCol];
-      return pos;
-    }; // end if
-  }; // end for loop for each row.
-
-  let spaceFound = false;
-  winLevel = 0; // resetting the winLevel meter in case.
-
-  for (let r = 0, c = 0; r < gameBoard.length; r++, c++) {
-    if ( gameBoard[r][c].indexOf(opponentPlayer) >= 0) { // if opponent has a piece there.
-      break; // the diagonal can't be won.
-    } else if ( gameBoard[r][c].indexOf(currentPlayer) >= 0 ) { // if the currentPlayer has a piece there.
-          winLevel++; //winLevel increases
-
-          if ( winLevel === (gameBoard.length - 1) ) {// ie. if winLevel threshold is met.
-            if ( spaceFound ) { // and we have previously found a potential move.
-              offensiveGo = true;
-              break; // execute the move.
-
-            } else { // but if no potential move was found.
-              if ( r === gameBoard.length - 2 ){ // if we are on the second last space, need to check if last space if free.
-                if ( gameBoard[r+1][c+1].indexOf(opponentPlayer) === -1 ) { // if last space is free, claim it. Otherwise it's occupied by the opponentPlayer.
-                  blockPositionCol = c+1; // assign the potential column position.
-                  blockPositionRow = r+1; // assigns potential row position.
-                  spaceFound = true; // resigters that we have found a potential move.
-                  offensiveGo = true;
-                  break;
-                }; // end if
-              };// end if
-            }; //end if not space found
-          }; // end if danger threshold is met.
-
-    } else { // the space is blank. So log the space as potential move.
-      blockPositionCol = c; // assign the potential column position.
-      blockPositionRow = r; // assigns potential row position.
-      spaceFound = true; // resigters that we have found a potential move.
-    };// end if
-  }; // end for loop;
-  if (offensiveGo) { // if defensive move is found
-    const pos = [blockPositionRow,blockPositionCol];
-    return pos;
-  }; // end if and end checking first diagonal
-
-  ////// the other diagonal now.
-  winLevel = 0; // resetting the winLevel meter.
-  spaceFound = false; // resets the space found from last diagonal check.
-  for (let r = 0, c = (gameBoard.length -1); r < gameBoard.length; r++, c--) {
-      if ( gameBoard[r][c].indexOf(opponentPlayer) >= 0) { // if opponent has a piece there.
-          break; // the diagonal can't be won.
-      } else if ( gameBoard[r][c].indexOf(currentPlayer) >= 0 ) { // if the currentPlayer has a piece there.
-          winLevel++; //winLevel increases
-
-          if ( winLevel === (gameBoard.length - 1) ) {// ie. if winLevel threshold is met.
-            if ( spaceFound ) { // and we have previously found a potential move.
-              offensiveGo = true;
-              break; // execute the move.
-
-            } else { // but if no potential move was found. and we have reached the threshold
-                if ( r === gameBoard.length - 2 ){ // if we are on the second last space, need to check if last space if free.
-                  if ( gameBoard[r+1][c-1].indexOf(opponentPlayer) === -1 ) { // if last space is free, claim it. Otherwise it's ocupied by the opponent.
-                    blockPositionCol = c-1; // assign the potential column position.
-                    blockPositionRow = r+1; // assigns potential row position.
-                    spaceFound = true; // resigters that we have found a potential move.
-                    offensiveGo = true;
-                    break;
-                  }; // end if
-                };// end if
-            }; //end if not space found
-          }; // end if winLevel threshold is met.
-
-      } else { // the space is blank. So log the space as potential move.
-          blockPositionCol = c; // assign the potential column position.
-          blockPositionRow = r; // assigns potential row position.
-          spaceFound = true; // resigters that we have found a potential move.
-      };// end if
-    }; // end for loop;
-    if (offensiveGo) { // if offensive move is found
-        const pos = [blockPositionRow,blockPositionCol];
-        return pos;
-    }; // end if and end checking the other diagonal.
-
-
-
-
-
-}; //end generateOffensiveMove
